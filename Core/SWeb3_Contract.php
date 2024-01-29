@@ -84,6 +84,23 @@ class SWeb3_Contract
     }
 
 
+    function estimate(string $function_name, $sendData, $extraParams = null)
+    {
+        if (!$this->ABI->isSendFunction($function_name)) {
+            throw new Exception('ERROR: ' . $function_name . ' does not exist as a send function (changing state transaction) in this contract');
+        }
+
+        $hashData = $this->ABI->EncodeData($function_name, $sendData);
+
+        if ($extraParams == null) $extraParams = [];
+        $extraParams['from'] =  $this->sweb3->personal->address;
+        $extraParams['to'] =  $this->address;
+        $extraParams['data'] =  $hashData;
+
+        return $this->estimateGas($extraParams);
+    }
+
+
 	function DecodeData(string $function_name, $data)
 	{
 		return $this->ABI->DecodeData($function_name, $data);

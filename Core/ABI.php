@@ -646,7 +646,7 @@ class ABI
             else
             {
 				$var_name = 'result';
-				if($output->name != '')  $var_name = $output->name;
+				if(is_object($output) && !empty($output->name))  $var_name = $output->name;
 				else if($output_count > 1) $var_name = 'elem_'.$elem_index; 
  
                 $group->$var_name = self::DecodeInput_Generic($varType, $encoded, $index);   
